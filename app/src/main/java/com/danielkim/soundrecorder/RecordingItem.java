@@ -12,18 +12,46 @@ public class RecordingItem implements Parcelable {
     private int mId; //id in database
     private int mLength; // length of recording in seconds
     private long mTime; // date/time of the recording
+    private int mFavourite; //SQLLite does not support boolean format
+                            // so it will use values of 1 or 0
 
-    public RecordingItem()
-    {
-    }
+    public RecordingItem() {}
 
-    public RecordingItem(Parcel in) {
+    protected RecordingItem(Parcel in) {
         mName = in.readString();
         mFilePath = in.readString();
         mId = in.readInt();
         mLength = in.readInt();
         mTime = in.readLong();
+        mFavourite = in.readInt();
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mName);
+        dest.writeString(mFilePath);
+        dest.writeInt(mId);
+        dest.writeInt(mLength);
+        dest.writeLong(mTime);
+        dest.writeInt(mFavourite);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<RecordingItem> CREATOR = new Creator<RecordingItem>() {
+        @Override
+        public RecordingItem createFromParcel(Parcel in) {
+            return new RecordingItem(in);
+        }
+
+        @Override
+        public RecordingItem[] newArray(int size) {
+            return new RecordingItem[size];
+        }
+    };
 
     public String getFilePath() {
         return mFilePath;
@@ -65,27 +93,11 @@ public class RecordingItem implements Parcelable {
         mTime = time;
     }
 
-    public static final Parcelable.Creator<RecordingItem> CREATOR = new Parcelable.Creator<RecordingItem>() {
-        public RecordingItem createFromParcel(Parcel in) {
-            return new RecordingItem(in);
-        }
-
-        public RecordingItem[] newArray(int size) {
-            return new RecordingItem[size];
-        }
-    };
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mId);
-        dest.writeInt(mLength);
-        dest.writeLong(mTime);
-        dest.writeString(mFilePath);
-        dest.writeString(mName);
+    public int getFavourite() {
+        return mFavourite;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setFavourite(int favourite) {
+        mFavourite = favourite;
     }
 }

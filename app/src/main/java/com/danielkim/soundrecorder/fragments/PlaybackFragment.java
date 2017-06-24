@@ -17,6 +17,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.danielkim.soundrecorder.DBHelper;
 import com.danielkim.soundrecorder.R;
 import com.danielkim.soundrecorder.RecordingItem;
 import com.melnykov.fab.FloatingActionButton;
@@ -35,6 +36,8 @@ public class PlaybackFragment extends DialogFragment{
     private RecordingItem item;
 
     private Handler mHandler = new Handler();
+
+    private DBHelper mDatabase;
 
     private MediaPlayer mMediaPlayer = null;
 
@@ -73,6 +76,14 @@ public class PlaybackFragment extends DialogFragment{
         minutes = TimeUnit.MILLISECONDS.toMinutes(itemDuration);
         seconds = TimeUnit.MILLISECONDS.toSeconds(itemDuration)
                 - TimeUnit.MINUTES.toSeconds(minutes);
+
+        if(item.getFavourite() > 0) {
+            isFavourite = true;
+        } else {
+            isFavourite = false;
+        }
+
+        mDatabase = new DBHelper(getActivity());
     }
 
     @Override
@@ -152,6 +163,9 @@ public class PlaybackFragment extends DialogFragment{
         });
 
         mFavouriteButton = (FloatingActionButton) view.findViewById(R.id.favourite);
+        if (isFavourite) {
+            mFavouriteButton.setImageResource(R.drawable.ic_favorite_white_24dp);
+        }
         mFavouriteButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -230,12 +244,17 @@ public class PlaybackFragment extends DialogFragment{
 
     private void unFavourite() {
         mFavouriteButton.setImageResource(R.drawable.ic_favorite_border_white_24dp);
-        Toast.makeText(getActivity(),"Boobi boobi booooo", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),"Removed from favourite!!", Toast.LENGTH_SHORT).show();
+        item.setFavourite(0);
+        mDatabase.updateFav(item);
+
     }
 
     private void makeFavourite() {
         mFavouriteButton.setImageResource(R.drawable.ic_favorite_white_24dp);
-        Toast.makeText(getActivity(),"Zoom zoom zoom zoom", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),"Added to favourite!!", Toast.LENGTH_SHORT).show();
+        item.setFavourite(1);
+        mDatabase.updateFav(item);
     }
 
     private void startPlaying() {
