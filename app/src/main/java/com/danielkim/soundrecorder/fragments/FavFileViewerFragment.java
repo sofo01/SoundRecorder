@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import com.danielkim.soundrecorder.R;
 import com.danielkim.soundrecorder.adapters.FavFileViewerAdapter;
 
+import java.util.Observer;
+
 /**
  * Created by Sofoklis on 24/06/2017.
  */
@@ -64,6 +66,7 @@ public class FavFileViewerFragment extends Fragment {
         return v;
     }
 
+    // This Observer seems redundant
     FileObserver observer =
             new FileObserver(Environment.getExternalStorageDirectory().toString()
                     + "/SoundRecorder") {

@@ -156,6 +156,10 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(DBHelperItem.COLUMN_NAME_FAVOURITE, item.getFavourite());
         db.update(DBHelperItem.TABLE_NAME, cv,
                 DBHelperItem._ID + "=" + item.getId(), null);
+
+        if (mOnDatabaseChangedListener != null) {
+            mOnDatabaseChangedListener.onDatabaseEntryRenamed();
+        }
     }
 
     public long restoreRecording(RecordingItem item) {
