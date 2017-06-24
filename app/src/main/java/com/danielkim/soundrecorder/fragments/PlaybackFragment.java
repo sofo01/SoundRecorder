@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.danielkim.soundrecorder.R;
 import com.danielkim.soundrecorder.RecordingItem;
@@ -39,12 +40,16 @@ public class PlaybackFragment extends DialogFragment{
 
     private SeekBar mSeekBar = null;
     private FloatingActionButton mPlayButton = null;
+    private FloatingActionButton mFavouriteButton = null;
     private TextView mCurrentProgressTextView = null;
     private TextView mFileNameTextView = null;
     private TextView mFileLengthTextView = null;
 
     //stores whether or not the mediaplayer is currently playing audio
     private boolean isPlaying = false;
+
+    //
+    private boolean isFavourite = false;
 
     //stores minutes and seconds of the length of the file.
     long minutes = 0;
@@ -146,6 +151,15 @@ public class PlaybackFragment extends DialogFragment{
             }
         });
 
+        mFavouriteButton = (FloatingActionButton) view.findViewById(R.id.favourite);
+        mFavouriteButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                favourite(isFavourite);
+                isFavourite = !isFavourite;
+            }
+        });
+
         mFileNameTextView.setText(item.getName());
         mFileLengthTextView.setText(String.format("%02d:%02d", minutes,seconds));
 
@@ -204,6 +218,24 @@ public class PlaybackFragment extends DialogFragment{
             //pause the MediaPlayer
             pausePlaying();
         }
+    }
+
+    private void favourite(boolean isFavourite){
+        if (!isFavourite) {
+            makeFavourite();
+        } else {
+            unFavourite();
+        }
+    }
+
+    private void unFavourite() {
+        mFavouriteButton.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+        Toast.makeText(getActivity(),"Boobi boobi booooo", Toast.LENGTH_SHORT).show();
+    }
+
+    private void makeFavourite() {
+        mFavouriteButton.setImageResource(R.drawable.ic_favorite_white_24dp);
+        Toast.makeText(getActivity(),"Zoom zoom zoom zoom", Toast.LENGTH_SHORT).show();
     }
 
     private void startPlaying() {

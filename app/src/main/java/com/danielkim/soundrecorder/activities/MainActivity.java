@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.danielkim.soundrecorder.R;
+import com.danielkim.soundrecorder.fragments.FavFileViewerFragment;
 import com.danielkim.soundrecorder.fragments.FileViewerFragment;
 import com.danielkim.soundrecorder.fragments.LicensesFragment;
 import com.danielkim.soundrecorder.fragments.RecordFragment;
@@ -68,8 +69,11 @@ public class MainActivity extends ActionBarActivity{
     }
 
     public class MyAdapter extends FragmentPagerAdapter {
-        private String[] titles = { getString(R.string.tab_title_record),
-                getString(R.string.tab_title_saved_recordings) };
+        private String[] titles = {
+                getString(R.string.tab_title_record),
+                getString(R.string.tab_title_saved_recordings),
+                getString(R.string.tab_title_saved_recordings_fav)
+        };
 
         public MyAdapter(FragmentManager fm) {
             super(fm);
@@ -83,6 +87,9 @@ public class MainActivity extends ActionBarActivity{
                 }
                 case 1:{
                     return FileViewerFragment.newInstance(position);
+                }
+                case 2:{
+                    return FavFileViewerFragment.newInstance(position);
                 }
             }
             return null;
